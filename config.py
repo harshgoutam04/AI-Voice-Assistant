@@ -1,9 +1,14 @@
 import os
+
+import streamlit as st
 from dotenv import load_dotenv
 
 load_dotenv()
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+try:
+    GROQ_API_KEY = st.secrets.get("GROQ_API_KEY") or os.getenv("GROQ_API_KEY")
+except FileNotFoundError:
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # Groq Models
 LLM_MODEL = "openai/gpt-oss-120b"

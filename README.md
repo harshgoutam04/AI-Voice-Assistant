@@ -147,6 +147,8 @@ pip install -r requirements.txt
 
 ## Environment Variables
 
+### Local Development
+
 Create a `.env` file
 
 ```env
@@ -158,6 +160,23 @@ STT_MODEL=whisper-large-v3-turbo
 
 VOICE_NAME=en-US-AriaNeural
 ```
+
+### Streamlit Cloud Deployment
+
+Do not commit `.env` or your API key to GitHub. In your Streamlit Cloud app:
+
+1. Open the app's **Settings** menu.
+2. Select **Secrets**.
+3. Add the following TOML:
+
+```toml
+GROQ_API_KEY = "your_new_groq_api_key"
+```
+
+4. Save the secret and restart/redeploy the app.
+
+The application reads `GROQ_API_KEY` from Streamlit Secrets in the cloud and
+continues to support `.env` for local development.
 
 ---
 
