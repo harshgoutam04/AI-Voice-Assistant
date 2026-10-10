@@ -1,0 +1,7 @@
+streamlit
+groq
+edge-tts
+python-dotenv
+soundfile
+pydub
+av

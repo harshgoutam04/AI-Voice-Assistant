@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.py[cod]
+
+assets/temp/*
+!assets/temp/.gitkeep
+
+.streamlit/secrets.toml
+.venv/
+venv/
+env/
