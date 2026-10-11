@@ -10,19 +10,11 @@ from services.audio_utils import (
     get_response_audio_path,
 )
 
-# --------------------------------------------------
-# PAGE CONFIG
-# --------------------------------------------------
-
 st.set_page_config(
     page_title="AI Voice Assistant",
     page_icon="🎙️",
     layout="wide",
 )
-
-# --------------------------------------------------
-# CUSTOM CSS
-# --------------------------------------------------
 
 st.markdown("""
 <style>
@@ -65,10 +57,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --------------------------------------------------
-# LOAD SERVICES
-# --------------------------------------------------
-
 @st.cache_resource
 def load_services():
 
@@ -83,10 +71,6 @@ def load_services():
 
 stt, llm, tts = load_services()
 
-# --------------------------------------------------
-# SESSION STATE
-# --------------------------------------------------
-
 if "messages" not in st.session_state:
 
     st.session_state.messages = []
@@ -94,10 +78,6 @@ if "messages" not in st.session_state:
 if "last_audio" not in st.session_state:
 
     st.session_state.last_audio = None
-
-# --------------------------------------------------
-# SIDEBAR
-# --------------------------------------------------
 
 with st.sidebar:
 
@@ -116,10 +96,6 @@ with st.sidebar:
 
         st.rerun()
 
-# --------------------------------------------------
-# HEADER
-# --------------------------------------------------
-
 st.markdown(
     "<div class='title'>🎙️ AI Voice Assistant</div>",
     unsafe_allow_html=True
@@ -131,10 +107,6 @@ st.markdown(
 )
 
 st.divider()
-
-# --------------------------------------------------
-# DISPLAY CHAT
-# --------------------------------------------------
 
 if len(st.session_state.messages):
 
@@ -186,28 +158,15 @@ st.subheader("🎤 Speak")
 
 audio = st.audio_input("Tap the microphone and ask your question")
 
-# --------------------------------------------------
-# PROCESS AUDIO
-# --------------------------------------------------
-
 if audio is not None:
 
     try:
 
-        # Clear previous temporary files
         clear_temp()
-
-        # -----------------------------
-        # Save recorded audio
-        # -----------------------------
 
         with st.spinner("🎤 Saving your voice..."):
 
             audio_path = save_uploaded_audio(audio)
-
-        # -----------------------------
-        # Speech To Text
-        # -----------------------------
 
         with st.spinner("📝 Understanding your speech..."):
 
@@ -219,13 +178,9 @@ if audio is not None:
 
             st.stop()
 
-        # Show transcript
-
         with st.chat_message("user"):
 
             st.write(transcript)
-
-        # Save user message
 
         st.session_state.messages.append(
             {
@@ -234,23 +189,15 @@ if audio is not None:
             }
         )
 
-        # -----------------------------
-        # AI Thinking
-        # -----------------------------
-
         with st.spinner("🤖 Thinking..."):
 
             ai_response = llm.generate(
                 st.session_state.messages
             )
 
-        # Show response
-
         with st.chat_message("assistant"):
 
             st.write(ai_response)
-
-        # Save AI response
 
         st.session_state.messages.append(
             {
@@ -258,10 +205,6 @@ if audio is not None:
                 "content": ai_response
             }
         )
-
-        # -----------------------------
-        # Text To Speech
-        # -----------------------------
 
         with st.spinner("🔊 Generating voice..."):
 
@@ -272,10 +215,6 @@ if audio is not None:
                 response_audio
             )
 
-        # -----------------------------
-        # Store Latest Audio
-        # -----------------------------
-
         st.session_state.last_audio = audio_file
 
         st.success("✅ Response generated successfully!")
@@ -283,10 +222,6 @@ if audio is not None:
     except Exception as e:
 
         st.error(f"Error: {e}")
-
-# --------------------------------------------------
-# PLAY RESPONSE
-# --------------------------------------------------
 
 if st.session_state.last_audio:
 
@@ -302,10 +237,6 @@ if st.session_state.last_audio:
         audio_bytes,
         format="audio/mp3"
     )
-
-# --------------------------------------------------
-# READY FOR NEXT QUESTION
-# --------------------------------------------------
 
 st.divider()
 
